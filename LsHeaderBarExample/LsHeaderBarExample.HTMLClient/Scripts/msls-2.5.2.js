@@ -27171,6 +27171,7 @@ var msls_shellView;
         return $tabContentRoot;
     }
 
+    // CHRISCOOKDEV
     function _addTabFooterContent(me, $screenRoot, navigationUnit, enhance) {
 
         var tabName = navigationUnit.pageName,
@@ -27189,8 +27190,11 @@ var msls_shellView;
                 $tabFooterContent, visibleButtonsSelector, $button);
         }
 
+        var $targetButtonRow = $screenRoot.find(".msls-buttons-row.msls-screen-buttons,.msls-buttons-row.msls-dialog-buttons");
+        $targetButtonRow.not(":has(div:empty)").prepend("<div></div>");
+
         $tabFooterContent = $(msls_templateStrings[footerContentTemplateId])
-                .appendTo($footer)
+                .insertAfter($targetButtonRow)
                 .attr(data_msls_tabName, tabName);
 
         for (var i = 0; i < commandItems.length; i++) {
@@ -27202,8 +27206,15 @@ var msls_shellView;
             $tabFooterContent.append($buttonView);
             navigationUnit.registerPageUiControl(buttonPresenter);
 
+            $buttonView.addClass("msls-compact-padding");
+            $buttonView.addClass("msls-large-icon");
+            $buttonView.addClass("ui-btn");
+            $buttonView.addClass("ui-shadow");
+            $buttonView.addClass("ui-btn-icon-notext");
+            $buttonView.removeClass("msls-leaf");
             $buttonView.on("updatelayout", onUpdateLayout);
         }
+        $tabFooterContent.append("<div></div>");
 
         if (enhance) {
             $tabFooterContent.trigger("create");
@@ -27212,8 +27223,17 @@ var msls_shellView;
         msls_handleContainerKeyboardNavigation(
             $tabFooterContent, visibleButtonsSelector);
 
+        $tabFooterContent.find(".id-element").each(function () {
+            var $this = $(this);
+            $this.addClass("ui-btn-icon-notext");
+            $this.removeClass("ui-btn-icon-top");
+            $this.removeAttr("data-iconpos");
+            $this.attr("title", $this.text());
+        });
+
         return $tabFooterContent;
     }
+    // CHRISCOOKDEV
 
     function _createTemplateForDialogFrame_helper(templateDataOut) {
 
